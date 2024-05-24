@@ -62,7 +62,7 @@
 <div id="main">
     <div id="container">
         <div id="image-container">
-            <img src="{{ asset('images/logo.png') }}" alt="QuizWiz Logo"/>
+            <img src="{{ asset('logo.png') }}" alt="Movie Quotes Logo"/>
         </div>
 
         <h1>{{ $subject }}</h1>

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\SignupUserRequest;
+use App\Mail\UserRegistered;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -19,7 +20,7 @@ class AuthController extends Controller
 
 		$user = User::create($credentials);
 
-		event(new Registered($user));
+		Mail::to($user)->queue(new UserRegistered($user));
 
 		return response()->json(['message' => 'User created successfully and email verification sent.'], 201);
 	}

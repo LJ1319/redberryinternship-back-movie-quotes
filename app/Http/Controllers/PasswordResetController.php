@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PasswordForgotRequest;
 use App\Http\Requests\PasswordUpdateRequest;
+use App\Mail\PasswordForgot;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -17,11 +19,19 @@ class PasswordResetController extends Controller
 	{
 		$credentials = $request->validated();
 
-		$status = Password::sendResetLink($credentials);
+		$user = User::whereEmail($credentials['email'])->first();
 
-		return $status === Password::RESET_LINK_SENT
-			? response()->json(['message' => __($status)])
-			: response()->json(['message' => __($status)], 422);
+		if (!$user) {
+			return response()->json([
+				'message' => "We can't find a user with that email address",
+			], 422);
+		}
+
+		$token = Password::createToken($user);
+
+		Mail::to($user)->queue(new PasswordForgot($user, $token));
+
+		return response()->json(['message' => 'Password reset link sent']);
 	}
 
 	public function reset(PasswordUpdateRequest $request): JsonResponse

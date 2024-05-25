@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,14 @@ Route::middleware('guest')->group(function () {
 			Route::post('/reset-password', 'reset')->name('reset');
 		}
 	);
+
+    Route::group(
+        ['controller' => GoogleAuthController::class, 'prefix' => 'auth/google', 'as' => 'auth.google.'],
+        function () {
+            Route::get('redirect', 'redirect')->name('redirect');
+            Route::get('callback', 'callback')->name('callback');
+        }
+    );
 });
 
 Route::middleware('auth:sanctum')->group(function () {

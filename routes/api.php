@@ -29,16 +29,16 @@ Route::middleware('guest')->group(function () {
 		}
 	);
 
-    Route::group(
-        ['controller' => GoogleAuthController::class, 'prefix' => 'auth/google', 'as' => 'auth.google.'],
-        function () {
-            Route::get('redirect', 'redirect')->name('redirect');
-            Route::get('callback', 'callback')->name('callback');
-        }
-    );
+	Route::group(
+		['controller' => GoogleAuthController::class, 'prefix' => 'auth/google', 'as' => 'auth.google.'],
+		function () {
+			Route::get('redirect', 'redirect')->name('redirect');
+			Route::get('callback', 'callback')->name('callback');
+		}
+	);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-	Route::get('/user', [UserController::class, 'get']);
+	Route::get('/user', [UserController::class, 'get'])->name('user.get');
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

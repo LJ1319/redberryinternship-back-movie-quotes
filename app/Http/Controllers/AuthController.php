@@ -20,7 +20,7 @@ class AuthController extends Controller
 
 		$user = User::create($credentials);
 
-		Mail::to($user)->queue(new UserRegistered($user));
+		Mail::to($user)->send(new UserRegistered($user));
 
 		return response()->json(['message' => 'User created successfully and email verification sent.'], 201);
 	}

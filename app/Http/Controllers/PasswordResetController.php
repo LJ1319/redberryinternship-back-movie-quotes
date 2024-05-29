@@ -29,7 +29,7 @@ class PasswordResetController extends Controller
 
 		$token = Password::createToken($user);
 
-		Mail::to($user)->queue(new PasswordForgot($user, $token));
+		Mail::to($user)->send(new PasswordForgot($user, $token));
 
 		return response()->json(['message' => 'Password reset link sent']);
 	}

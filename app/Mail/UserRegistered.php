@@ -19,7 +19,7 @@ class UserRegistered extends Mailable implements ShouldQueue
 	/**
 	 * Create a new message instance.
 	 */
-	public function __construct(public User $user)
+	public function __construct(public User $user, public $locale)
 	{
 	}
 
@@ -38,7 +38,7 @@ class UserRegistered extends Mailable implements ShouldQueue
 	 */
 	public function content(): Content
 	{
-		$away = config('app.frontend_url');
+		$away = config('app.frontend_url') . '/' . $this->locale;
 
 		$name = 'verification.verify';
 		$expiration = now()->addMinutes(Config::get('auth.verification.expire', 120));
@@ -50,8 +50,9 @@ class UserRegistered extends Mailable implements ShouldQueue
 			$name,
 			$expiration,
 			[
-				'id'   => $id,
-				'hash' => $hash,
+				'locale' => $this->locale,
+				'id'     => $id,
+				'hash'   => $hash,
 			]
 		);
 

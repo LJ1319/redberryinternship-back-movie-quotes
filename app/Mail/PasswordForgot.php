@@ -19,7 +19,7 @@ class PasswordForgot extends Mailable implements ShouldQueue
 	/**
 	 * Create a new message instance.
 	 */
-	public function __construct(public User $user, public string $token)
+	public function __construct(public User $user, public string $token, public $locale)
 	{
 	}
 
@@ -38,7 +38,7 @@ class PasswordForgot extends Mailable implements ShouldQueue
 	 */
 	public function content(): Content
 	{
-		$away = config('app.frontend_url');
+		$away = config('app.frontend_url') . '/' . $this->locale;
 
 		$name = 'password.reset';
 		$expiration = now()->addMinutes(Config::get('auth.passwords.users.expire', 120));
@@ -47,6 +47,9 @@ class PasswordForgot extends Mailable implements ShouldQueue
 		$resetUrl = URL::temporarySignedRoute(
 			$name,
 			$expiration,
+			[
+				'locale' => $this->locale,
+			]
 		);
 
 		return new Content(

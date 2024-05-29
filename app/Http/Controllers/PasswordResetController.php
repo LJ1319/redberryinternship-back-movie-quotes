@@ -28,8 +28,9 @@ class PasswordResetController extends Controller
 		}
 
 		$token = Password::createToken($user);
+		$locale = app()->getLocale();
 
-		Mail::to($user)->send(new PasswordForgot($user, $token));
+		Mail::to($user)->send(new PasswordForgot($user, $token, $locale));
 
 		return response()->json(['message' => 'Password reset link sent']);
 	}

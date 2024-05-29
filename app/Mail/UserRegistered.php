@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -11,14 +12,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 
-class UserRegistered extends Mailable
+class UserRegistered extends Mailable implements ShouldQueue
 {
 	use Queueable, SerializesModels;
 
 	/**
 	 * Create a new message instance.
 	 */
-	public function __construct(public User $user)
+	public function __construct(public User $user, public $locale)
 	{
 	}
 
@@ -37,7 +38,7 @@ class UserRegistered extends Mailable
 	 */
 	public function content(): Content
 	{
-		$away = config('app.frontend_url');
+		$away = config('app.frontend_url') . '/' . $this->locale;
 
 		$name = 'verification.verify';
 		$expiration = now()->addMinutes(Config::get('auth.verification.expire', 120));
@@ -49,8 +50,9 @@ class UserRegistered extends Mailable
 			$name,
 			$expiration,
 			[
-				'id'   => $id,
-				'hash' => $hash,
+				'locale' => $this->locale,
+				'id'     => $id,
+				'hash'   => $hash,
 			]
 		);
 

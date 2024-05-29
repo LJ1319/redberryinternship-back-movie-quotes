@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class EmailVerificationController extends Controller
 {
-	public function verify(string $id): JsonResponse
+	public function verify(string $locale, string $id): JsonResponse
 	{
 		$user = User::findOrFail($id);
 

@@ -23,7 +23,7 @@ class PasswordResetController extends Controller
 
 		if (!$user) {
 			return response()->json([
-				'message' => "We can't find a user with that email address",
+				'message' => __('messages.no_email'),
 			], 422);
 		}
 
@@ -46,7 +46,7 @@ class PasswordResetController extends Controller
 		$user = User::whereEmail($credentials['email'])->first();
 
 		if (Hash::check($credentials['password'], $user->password)) {
-			return response()->json(['message' => 'New password must be different than the current one'], 422);
+			return response()->json(['message' => __('messages.different_passwords')], 422);
 		}
 
 		$status = Password::reset(

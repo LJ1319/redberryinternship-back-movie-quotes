@@ -19,7 +19,7 @@ class AuthController extends Controller
 		$credentials = $request->validated();
 
 		$user = User::create($credentials);
-        $locale = app()->getLocale();
+		$locale = app()->getLocale();
 
 		Mail::to($user)->send(new UserRegistered($user, $locale));
 
@@ -38,7 +38,7 @@ class AuthController extends Controller
 			'password'          => $password,
 			fn (Builder $query) => $query->whereNotNull('email_verified_at'),
 		], $remember)) {
-			return response()->json(['message' => 'Check your credentials and email verification.'], 422);
+			return response()->json(['message' => __('messages.credentials_validation')], 422);
 		}
 
 		$request->session()->regenerate();

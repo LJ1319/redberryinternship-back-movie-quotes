@@ -23,7 +23,7 @@
             padding: 0;
             border: 0;
             border-radius: 0.625rem;
-            background-color: #4B69FD;
+            background-color: #E31221;
             text-align: center;
             color: white;
         }
@@ -43,7 +43,7 @@
 
         #main {
             height: 100vh;
-            background-color: #F6F6F6;
+            background: linear-gradient(187.16deg, #181623 0.07%, #191725 51.65%, #0D0B14 98.75%);
         }
 
         #container {

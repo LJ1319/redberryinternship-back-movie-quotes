@@ -16,7 +16,7 @@ class SignupUserRequest extends FormRequest
 		return [
 			'username' => ['required', 'min:3', 'max:15', 'regex:/^[a-z0-9]+$/i', 'unique:users,username'],
 			'email'    => ['required', 'email', 'unique:users,email'],
-			'password' => ['required', 'min:3', 'max:15', 'regex:/^[a-z0-9]+$/i', 'confirmed'],
+			'password' => ['required', 'min:8', 'max:15', 'regex:/^[a-z0-9]+$/i', 'confirmed'],
 		];
 	}
 }

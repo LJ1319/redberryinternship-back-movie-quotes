@@ -6,8 +6,6 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -23,23 +21,11 @@ class UserController extends Controller
 		$user->update($validated);
 
 		if (isset($validated['avatar'])) {
-			$imageName = $this->processImage($request['avatar']);
+			$path = $validated['avatar']->store('public');
 			$user->clearMediaCollection();
-			$user->addMedia(storage_path('app/public/' . $imageName))->toMediaCollection();
+			$user->addMedia(storage_path('app/' . $path))->toMediaCollection();
 		}
 
 		return new UserResource($user);
-	}
-
-	private function processImage(string $image_64): string
-	{
-		$extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];
-		$replace = substr($image_64, 0, strpos($image_64, ',') + 1);
-		$image = str_replace($replace, '', $image_64);
-		$image = str_replace(' ', '+', $image);
-		$imageName = Str::random(10) . '.' . $extension;
-		Storage::disk('public')->put($imageName, base64_decode($image));
-
-		return $imageName;
 	}
 }

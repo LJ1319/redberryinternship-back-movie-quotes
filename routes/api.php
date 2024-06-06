@@ -40,7 +40,11 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 	});
 
 	Route::middleware('auth:sanctum')->group(function () {
-		Route::get('/user', [UserController::class, 'get'])->name('user.get');
+		Route::controller(UserController::class)->name('user.')->group(function () {
+			Route::get('/user', 'get')->name('get');
+			Route::patch('/users/{id}', 'update')->name('update');
+		});
+
 		Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 	});
 });

@@ -18,16 +18,29 @@ class GoogleAuthController extends Controller
 	public function callback(): JsonResponse
 	{
 		$googleUser = Socialite::driver('google')->stateless()->user();
+		$username = $googleUser->name;
+
+		$target = User::where('google_id', $googleUser->id)->first();
+		if ($target) {
+			$username = $target['username'];
+		}
 
 		$user = User::updateOrCreate(
 			['google_id' => $googleUser->id],
 			[
-				'username'          => $googleUser->name,
+				'username'          => $username,
 				'email'             => $googleUser->email,
-				'password'          => Str::password(8),
 				'email_verified_at' => now(),
+				'password'          => Str::password(8),
 			]
 		);
+
+		$avatar = $target->getFirstMedia();
+		if (!$avatar) {
+			$user->clearMediaCollection();
+			$user->addMediaFromUrl($googleUser->avatar_original)
+				 ->toMediaCollection();
+		}
 
 		Auth::login($user);
 

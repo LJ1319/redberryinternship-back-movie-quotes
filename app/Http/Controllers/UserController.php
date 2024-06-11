@@ -14,14 +14,13 @@ class UserController extends Controller
 		return new UserResource($request->user());
 	}
 
-	public function update(string $locale, string $id, UserUpdateRequest $request): UserResource
+	public function update(string $locale, User $user, UserUpdateRequest $request): UserResource
 	{
-		$user = User::findOrFail($id);
 		$validated = $request->validated();
 		$user->update($validated);
 
 		if (isset($validated['avatar'])) {
-			$path = $validated['avatar']->store('public');
+			$path = $validated['avatar']->store();
 			$user->clearMediaCollection();
 			$user->addMedia(storage_path('app/' . $path))->toMediaCollection();
 		}

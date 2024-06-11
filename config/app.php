@@ -94,7 +94,7 @@ return [
 
 	'available_locales' => [
 		'English' => 'en',
-		'ქართული' => 'ge',
+		'ქართული' => 'ka',
 	],
 
 	/*

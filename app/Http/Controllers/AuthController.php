@@ -19,7 +19,7 @@ class AuthController extends Controller
 		$credentials = $request->validated();
 		$user = User::create($credentials);
 
-        $locale = app()->getLocale();
+		$locale = app()->getLocale();
 		Mail::to($user)->send(new UserRegistered($user, $locale));
 
 		return response()->json(['message' => 'User created successfully and email verification sent.'], 201);

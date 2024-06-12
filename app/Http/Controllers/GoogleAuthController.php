@@ -21,8 +21,10 @@ class GoogleAuthController extends Controller
 		$username = $googleUser->name;
 
 		$target = User::where('google_id', $googleUser->id)->first();
+		$avatar = null;
 		if ($target) {
 			$username = $target['username'];
+			$avatar = $target->getFirstMedia();
 		}
 
 		$user = User::updateOrCreate(
@@ -35,7 +37,6 @@ class GoogleAuthController extends Controller
 			]
 		);
 
-		$avatar = $target->getFirstMedia();
 		if (!$avatar) {
 			$user->clearMediaCollection();
 			$user->addMediaFromUrl($googleUser->avatar_original)

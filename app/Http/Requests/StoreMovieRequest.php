@@ -14,15 +14,15 @@ class StoreMovieRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'title.en'        => 'required|regex:/^([\w\:-]+\s)*[\w\:-]+$/',
-			'title.ka'        => 'required|regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/',
-			'genres'          => 'required|array',
-			'year'            => 'required|numeric',
-			'directors.en'    => 'required|regex:/^([\w\:-]+\s)*[\w\:-]+$/',
-			'directors.ka'    => 'required|regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/',
-			'description.en'  => 'required|regex:/^([\w\:-]+\s)*[\w\:-]+$/',
-			'description.ka'  => 'required|regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/',
-			'image'           => 'required|image',
+			'title.en'        => ['required', 'regex:/^([\w\:-]+\s)*[\w\:-]+$/'],
+			'title.ka'        => ['required', 'regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/'],
+			'genres'          => ['required', 'array'],
+			'year'            => ['required', 'numeric'],
+			'directors.en'    => ['required', 'regex:/^([\w\:-]+\s)*[\w\:-]+$/'],
+			'directors.ka'    => ['required', 'regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/'],
+			'description.en'  => ['required', 'regex:/^([\w\:-]+\s)*[\w\:-]+$/'],
+			'description.ka'  => ['required', 'regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/'],
+			'image'           => ['required', 'image'],
 		];
 	}
 }

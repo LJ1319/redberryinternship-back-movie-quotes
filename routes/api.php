@@ -59,9 +59,10 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 			['controller' => MovieController::class, 'prefix' => 'movies', 'as' => 'movies.'],
 			function () {
 				Route::get('/', 'index')->name('index');
-				Route::get('/{user}', 'get')->name('get');
+				Route::get('/{movie}', 'get')->name('get');
 				Route::post('/', 'store')->name('store');
-				Route::patch('/{user}', 'update')->name('update');
+				Route::patch('/{movie}', 'update')->name('update');
+				Route::delete('/{movie}', 'destroy')->name('destroy');
 			}
 		);
 

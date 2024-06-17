@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EmailVerificationRequest;
+use App\Http\Requests\VerifyEmailRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +23,7 @@ class EmailVerificationController extends Controller
 		return response()->json(['message' => 'Email verified.']);
 	}
 
-	public function resend(EmailVerificationRequest $request): JsonResponse
+	public function resend(VerifyEmailRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
 

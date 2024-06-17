@@ -70,6 +70,10 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 			['controller' => QuoteController::class, 'prefix' => 'quotes', 'as' => 'quotes.'],
 			function () {
 				Route::get('/', 'index')->name('index');
+				Route::get('/{quote}', 'get')->name('get');
+				Route::post('/', 'store')->name('store');
+				Route::patch('/{quote}', 'update')->name('update');
+				Route::delete('/{quote}', 'destroy')->name('destroy');
 			}
 		);
 

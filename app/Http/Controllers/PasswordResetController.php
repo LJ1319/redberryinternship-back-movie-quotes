@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PasswordForgotRequest;
-use App\Http\Requests\PasswordUpdateRequest;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Mail\PasswordForgot;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 class PasswordResetController extends Controller
 {
-	public function forgot(PasswordForgotRequest $request): JsonResponse
+	public function forgot(ForgotPasswordRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
 
@@ -35,7 +35,7 @@ class PasswordResetController extends Controller
 		return response()->json(['message' => 'Password reset link sent']);
 	}
 
-	public function reset(PasswordUpdateRequest $request): JsonResponse
+	public function reset(UpdatePasswordRequest $request): JsonResponse
 	{
 		$credentials = $request->validated();
 

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EmailVerificationRequest extends FormRequest
+class StoreQuoteRequest extends FormRequest
 {
 	/**
 	 * Get the validation rules that apply to the request.
@@ -14,7 +14,10 @@ class EmailVerificationRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'email' => ['required', 'email'],
+			'title.en'   => ['required', 'regex:/^([\w\:-]+\s)*[\w\:-]+$/'],
+			'title.ka'   => ['required', 'regex:/^([ა-ჰ0-9\:_-]+\s)*[ა-ჰ0-9\:_-]+$/'],
+			'movie_id'   => ['integer', 'exists:movies,id'],
+			'image'      => ['required', 'image'],
 		];
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class UserController extends Controller
 		return new UserResource($request->user());
 	}
 
-	public function update(string $locale, User $user, UserUpdateRequest $request): UserResource
+	public function update(string $locale, User $user, UpdateUserRequest $request): UserResource
 	{
 		$validated = $request->validated();
 		$user->update($validated);

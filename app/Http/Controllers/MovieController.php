@@ -14,13 +14,17 @@ class MovieController extends Controller
 {
 	public function index(): AnonymousResourceCollection
 	{
-		$movies = Movie::latest()->paginate(10);
+		$movies = Movie::owner()
+						->with(['media', 'quotes'])
+						->latest()->get();
 
 		return MovieListResource::collection($movies);
 	}
 
 	public function get(string $locale, Movie $movie): MovieResource
 	{
+		$movie->load('media', 'genres', 'quotes', 'quotes.user', 'quotes.movie');
+
 		return new MovieResource($movie);
 	}
 
@@ -29,11 +33,11 @@ class MovieController extends Controller
 		$validated = $request->validated();
 
 		$movie = Movie::create([
-			'user_id'            => auth()->id(),
-			'title'              => $validated['title'],
-			'year'               => $validated['year'],
-			'directors'          => $validated['directors'],
-			'description'        => $validated['description'],
+			'user_id'       => auth()->id(),
+			'title'         => $validated['title'],
+			'year'          => $validated['year'],
+			'directors'     => $validated['directors'],
+			'description'   => $validated['description'],
 		]);
 
 		$movie->genres()->attach(collect($validated['genres'])->pluck('id'));
@@ -42,7 +46,7 @@ class MovieController extends Controller
 		return response()->json(['message' => 'Movie added successfully'], 201);
 	}
 
-	public function update(string $locale, Movie $movie, UpdateMovieRequest $request)
+	public function update(string $locale, Movie $movie, UpdateMovieRequest $request): JsonResponse
 	{
 		$validated = $request->validated();
 

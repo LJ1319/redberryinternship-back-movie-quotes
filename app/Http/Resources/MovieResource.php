@@ -22,7 +22,7 @@ class MovieResource extends JsonResource
 			'genres'       => GenreResource::collection($this->genres),
 			'directors'    => $this->directors,
 			'description'  => $this->description,
-			'quotes'       => $this->quotes()->count(),
+			'quotes'       => QuoteResource::collection($this->quotes->sortByDesc('created_at')),
 			'translations' => $this->translations,
 		];
 	}

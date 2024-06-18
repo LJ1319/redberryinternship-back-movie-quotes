@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PasswordForgotRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
 	/**
 	 * Get the validation rules that apply to the request.
@@ -14,7 +14,9 @@ class PasswordForgotRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'email' => ['required', 'email'],
+			'token'     => ['required'],
+			'email'     => ['required', 'email'],
+			'password'  => ['required', 'min:8', 'max:15', 'regex:/^[a-z0-9]+$/i', 'confirmed'],
 		];
 	}
 }

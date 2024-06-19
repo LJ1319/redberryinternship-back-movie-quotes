@@ -23,7 +23,16 @@ class MovieController extends Controller
 
 	public function get(string $locale, Movie $movie): MovieResource
 	{
-		$movie->load('media', 'genres', 'quotes', 'quotes.user', 'quotes.movie');
+		$movie->load(
+			'media',
+			'genres',
+			'quotes',
+			'quotes.user',
+			'quotes.movie',
+			'quotes.likes',
+			'quotes.comments',
+			'quotes.comments.user'
+		);
 
 		return new MovieResource($movie);
 	}

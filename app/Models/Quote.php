@@ -41,4 +41,9 @@ class Quote extends Model implements HasMedia
 	{
 		return $this->morphMany(Comment::class, 'commentable');
 	}
+
+	public function isLiked(): bool
+	{
+		return $this->likes()->where('user_id', auth()->id())->exists();
+	}
 }

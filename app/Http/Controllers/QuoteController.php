@@ -13,7 +13,7 @@ class QuoteController extends Controller
 {
 	public function index(): AnonymousResourceCollection
 	{
-		$quotes = Quote::with(['media', 'user', 'movie', 'likes', 'comments'])
+		$quotes = Quote::with(['media', 'user', 'movie', 'likes', 'comments', 'comments.user'])
 						->latest()->paginate(10);
 
 		return QuoteResource::collection($quotes);
@@ -21,7 +21,14 @@ class QuoteController extends Controller
 
 	public function get(string $locale, Quote $quote): QuoteResource
 	{
-		$quote->load('media', 'user', 'movie', 'likes', 'comments');
+		$quote->load(
+			'media',
+			'user',
+			'movie',
+			'likes',
+			'comments',
+			'comments.user'
+		);
 
 		return new QuoteResource($quote);
 	}
@@ -55,6 +62,8 @@ class QuoteController extends Controller
 
 	public function destroy(string $locale, Quote $quote): JsonResponse
 	{
+		$quote->likes()->delete();
+		$quote->comments()->delete();
 		$quote->delete();
 
 		return response()->json(['message' =>'Quote deleted successfully']);

@@ -22,8 +22,9 @@ class QuoteResource extends JsonResource
 			'user_avatar'         => $this->user->getFirstMediaUrl(),
 			'movie_title'         => $this->movie->title,
 			'movie_year'          => $this->movie->year,
-			'likes'               => $this->likes()->count(),
-			'comments'            => $this->comments()->count(),
+			'likes'               => $this->likes->count(),
+			'isLiked'             => $this->isLiked(),
+			'comments'            => CommentResource::collection($this->comments->sortByDesc('created_at')),
 			'translations'        => $this->translations,
 		];
 	}

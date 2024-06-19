@@ -6,7 +6,9 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\QuoteCommentController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\QuoteLikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +78,17 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 				Route::delete('/{quote}', 'destroy')->name('destroy');
 			}
 		);
+
+		Route::group(
+			['controller' => QuoteLikeController::class, 'prefix' => 'quotes', 'as' => 'quotes.likes.'],
+			function () {
+				Route::post('/{quote}/likes', 'store')->name('store');
+				Route::delete('/{quote}/likes', 'destroy')->name('destroy');
+			}
+		);
+
+		Route::post('/quotes/{quote}/comments', [QuoteCommentController::class, 'store'])
+			->name('quotes.comments.store');
 
 		Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 	});

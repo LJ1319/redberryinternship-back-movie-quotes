@@ -6,14 +6,29 @@ use App\Http\Requests\StoreQuoteRequest;
 use App\Http\Requests\UpdateQuoteRequest;
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class QuoteController extends Controller
 {
 	public function index(): AnonymousResourceCollection
 	{
-		$quotes = Quote::with(['media', 'user', 'movie', 'likes', 'comments', 'comments.user'])
+		$quotes =
+			QueryBuilder::for(Quote::class)
+						->with(['media', 'user', 'movie', 'likes', 'comments', 'comments.user'])
+						->allowedFilters([
+							'title',
+							AllowedFilter::callback(
+								'movie_title',
+								fn (Builder $query, $value) => $query->whereHas(
+									'movie',
+									fn ($query) => $query->whereRaw('LOWER(title) like ?', ['%' . strtolower($value) . '%'])
+								)
+							),
+						])
 						->latest()->paginate(10);
 
 		return QuoteResource::collection($quotes);

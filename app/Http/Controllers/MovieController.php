@@ -9,13 +9,17 @@ use App\Http\Resources\MovieResource;
 use App\Models\Movie;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MovieController extends Controller
 {
 	public function index(): AnonymousResourceCollection
 	{
-		$movies = Movie::owner()
+		$movies =
+			QueryBuilder::for(Movie::class)
+						->owner()
 						->with(['media', 'quotes'])
+						->allowedFilters(['title'])
 						->latest()->get();
 
 		return MovieListResource::collection($movies);

@@ -74,11 +74,4 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword,
 	{
 		return $this->hasMany(Comment::class);
 	}
-
-	//	public function hasLikedQuote(Quote $quote): bool
-	//	{
-	//		return
-	//			$this->likes->contains('likeable_type', Quote::class) &&
-	//			$this->likes->contains('likeable_id', $quote->id);
-	//	}
 }

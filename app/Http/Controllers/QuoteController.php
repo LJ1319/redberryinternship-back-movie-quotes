@@ -6,7 +6,6 @@ use App\Http\Requests\StoreQuoteRequest;
 use App\Http\Requests\UpdateQuoteRequest;
 use App\Http\Resources\QuoteResource;
 use App\Models\Quote;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -18,18 +17,9 @@ class QuoteController extends Controller
 	{
 		$quotes =
 			QueryBuilder::for(Quote::class)
-						->with(['media', 'user', 'movie', 'likes', 'comments', 'comments.user'])
-						->allowedFilters([
-							'title',
-							AllowedFilter::callback(
-								'movie_title',
-								fn (Builder $query, $value) => $query->whereHas(
-									'movie',
-									fn ($query) => $query->whereRaw('LOWER(title) like ?', ['%' . strtolower($value) . '%'])
-								)
-							),
-						])
-						->latest()->paginate(10);
+						->with(['media', 'user', 'movie', 'likes', 'comments.user'])
+						->allowedFilters(['title', AllowedFilter::scope('movie_title')])
+						->latest()->cursorPaginate(10);
 
 		return QuoteResource::collection($quotes);
 	}
@@ -41,7 +31,6 @@ class QuoteController extends Controller
 			'user',
 			'movie',
 			'likes',
-			'comments',
 			'comments.user'
 		);
 

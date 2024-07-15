@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,5 +46,13 @@ class Quote extends Model implements HasMedia
 	public function isLiked(): bool
 	{
 		return $this->likes()->where('user_id', auth()->id())->exists();
+	}
+
+	public function scopeMovieTitle(Builder $query, $value): void
+	{
+		$query->whereHas(
+			'movie',
+			fn ($query) => $query->whereRaw('LOWER(title) like ?', ['%' . strtolower($value) . '%'])
+		);
 	}
 }

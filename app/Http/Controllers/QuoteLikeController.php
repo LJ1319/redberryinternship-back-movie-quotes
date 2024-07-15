@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Quote;
+use App\Notifications\QuoteInteracted;
 use Illuminate\Http\JsonResponse;
 
 class QuoteLikeController extends Controller
@@ -11,9 +12,21 @@ class QuoteLikeController extends Controller
 	public function store(string $locale, Quote $quote): JsonResponse
 	{
 		if (!$quote->isLiked()) {
-			$quote->likes()->create([
+			$like = $quote->likes()->create([
 				'user_id' => auth()->id(),
 			]);
+
+			if ($like->user_id !== $quote->user_id) {
+				$quote->user->notify(
+					new QuoteInteracted(
+						'like',
+						$quote->id,
+						$quote->user_id,
+						$like->user->username,
+						$like->user->getFirstMediaUrl()
+					)
+				);
+			}
 		}
 
 		return response()->json(['message' => 'Liked quote successfully'], 201);

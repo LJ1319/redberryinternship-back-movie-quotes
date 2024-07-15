@@ -5,6 +5,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\QuoteCommentController;
 use App\Http\Controllers\QuoteController;
@@ -38,8 +39,8 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 		Route::group(
 			['controller' => GoogleAuthController::class, 'prefix' => 'auth/google', 'as' => 'auth.google.'],
 			function () {
-				Route::get('redirect', 'redirect')->name('redirect');
-				Route::get('callback', 'callback')->name('callback');
+				Route::get('/redirect', 'redirect')->name('redirect');
+				Route::get('/callback', 'callback')->name('callback');
 			}
 		);
 	});
@@ -88,7 +89,15 @@ Route::prefix('{locale}')->middleware('localization')->group(function () {
 		);
 
 		Route::post('/quotes/{quote}/comments', [QuoteCommentController::class, 'store'])
-			->name('quotes.comments.store');
+				->name('quotes.comments.store');
+
+		Route::group(
+			['controller' => NotificationController::class, 'prefix' => 'notifications', 'as' => 'notifications.'],
+			function () {
+				Route::get('/', 'index')->name('index');
+				Route::patch('/', 'update')->name('update');
+			}
+		);
 
 		Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 	});

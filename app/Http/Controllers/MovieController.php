@@ -18,7 +18,7 @@ class MovieController extends Controller
 		$movies =
 			QueryBuilder::for(Movie::class)
 						->owner()
-						->with(['media', 'quotes'])
+						->with(['media', 'quotes', 'genres'])
 						->allowedFilters(['title'])
 						->latest()->get();
 
@@ -30,11 +30,9 @@ class MovieController extends Controller
 		$movie->load(
 			'media',
 			'genres',
-			'quotes',
 			'quotes.user',
 			'quotes.movie',
 			'quotes.likes',
-			'quotes.comments',
 			'quotes.comments.user'
 		);
 

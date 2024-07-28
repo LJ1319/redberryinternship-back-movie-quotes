@@ -19,7 +19,7 @@ class QuoteController extends Controller
 			QueryBuilder::for(Quote::class)
 						->with(['media', 'user', 'movie', 'likes', 'comments.user'])
 						->allowedFilters(['title', AllowedFilter::scope('movie_title')])
-						->latest()->cursorPaginate(10);
+						->latest()->simplePaginate(10);
 
 		return QuoteResource::collection($quotes);
 	}
